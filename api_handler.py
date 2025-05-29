@@ -1,38 +1,30 @@
 import requests
-from utils import load_config
 
-def fetch_current_weather(config):
-    api_key = config['api_key']
-    location = config['location']
-    units = config['units']
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units={units}"
-    try:
-        response = requests.get(url)
-        data = response.json()
-        if response.status_code == 200:
-            print(f"🌤️ {data['name']}, {data['sys']['country']} | {data['main']['temp']}° | Humidity: {data['main']['humidity']}% | {data['weather'][0]['description'].capitalize()}")
-        else:
-            print(f"Error: {data.get('message', 'Unable to fetch data')}")
-    except Exception as e:
-        print(f"Exception: {e}")
+class APIHandler:
+    def __init__(self, default_city="London", units="metric", api_key=None):
+        self.base_url = "https://api.weatherapi.com/v1/current.json"
+        self.units = units
+        self.api_key = api_key or '36819401e39b47cfb7382236252805'
+        self.default_city = default_city
+        self.aqi = "yes"
 
-def fetch_forecast(config):
-    api_key = config['api_key']
-    location = config['location']
-    units = config['units']
-    url = f"http://api.openweathermap.org/data/2.5/forecast?q={location}&appid={api_key}&units={units}"
-    try:
-        response = requests.get(url)
-        data = response.json()
-        if response.status_code == 200:
-            print("📅 5-Day Forecast:")
-            for i in range(0, len(data['list']), 8):
-                entry = data['list'][i]
-                date = entry['dt_txt'].split(" ")[0]
-                temp = entry['main']['temp']
-                desc = entry['weather'][0]['description'].capitalize()
-                print(f"{date}: {temp}° | {desc}")
-        else:
-            print(f"Error: {data.get('message', 'Unable to fetch forecast')}")
-    except Exception as e:
-        print(f"Exception: {e}")
+    def fetch_weather(self):
+        """
+        Fetch and display current weather data from WeatherAPI.
+        """
+        params = {
+            'key': self.api_key,
+            'q': self.default_city,
+            'aqi': self.aqi
+        }
+        try:
+            response = requests.get(self.base_url, params=params)
+            response.raise_for_status()  # Raise an error for bad responses
+            data = response.json()
+            print(f"Current weather in {data['location']['name']}, {data['location']['country']}:")
+            print(f"Temperature: {data['current']['temp_c']}°C")
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching weather data: {e}")
+            return None
+
+        
