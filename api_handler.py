@@ -4,7 +4,7 @@ class APIHandler:
     def __init__(self, default_city="London", units="metric", api_key=None):
         self.base_url = "https://api.weatherapi.com/v1/current.json"
         self.units = units
-        self.api_key = api_key or '36819401e39b47cfb7382236252805'
+        self.api_key = api_key or 'dbf62e8a2cb24229a1f150051252905'
         self.default_city = default_city
         self.aqi = "yes"
 
