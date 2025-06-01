@@ -51,10 +51,4 @@ if __name__ == "__main__":
 # This script is a command-line interface (CLI) for a weather application.
 # It allows users to fetch current weather data, view a 5-day forecast (not implemented),
 # change the city for which weather data is fetched, and toggle between metric and imperial units.
-# The configuration is loaded from a JSON file, and any changes made by the user are saved back to this file.
-# The APIHandler class is responsible for making requests to the weather API and handling the response.
-# The script uses the utils module to load and save configuration settings. 
-# The main function orchestrates the user interaction and API calls.
-# This script is a command-line interface (CLI) for a weather application.
-# It allows users to fetch current weather data, view a 5-day forecast (not implemented),
-# change the city for which weather data is fetched, and toggle between metric and imperial units.
+# The configuration is loaded from a JSON file, and any changes made by the user are saved back to this file

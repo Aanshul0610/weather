@@ -11,7 +11,7 @@ def load_config():
     if not os.path.exists(CONFIG_FILE):
         print(f"⚠️ {CONFIG_FILE} not found. Creating default configuration...")
         default_config = {
-            "api_key": "671e070c61b542ccac890712250106",
+            "api_key": "36819401e39b47cfb7382236252805",
             "location": "London",
             "units": "metric"
         }
