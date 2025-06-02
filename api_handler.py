@@ -4,7 +4,8 @@ class APIHandler:
     def __init__(self, default_city="New York", units="metric", api_key=None):
         self.base_url = "https://api.weatherapi.com/v1/current.json"
         self.units = units
-        self.api_key = api_key or '671e070c61b542ccac890712250106'
+        # read keys from config
+        self.api_key = api_key
         self.default_city = default_city
         self.aqi = "yes"
 
@@ -18,11 +19,15 @@ class APIHandler:
             'aqi': self.aqi
         }
         try:
+
             response = requests.get(self.base_url, params=params)
             response.raise_for_status()  # Raise an error for bad responses
             data = response.json()
             print(f"Current weather in {data['location']['name']}, {data['location']['country']}:")
-            print(f"Temperature: {data['current']['temp_c']}°C")
+            if self.units == 'metric':
+                print(f"Temperature: {data['current']['temp_c']}°C")
+            else:
+                print(f"Temperature: {data['current']['temp_f']}°F")
         except requests.exceptions.RequestException as e:
             print(f"Error fetching weather data: {e}")
             return None
