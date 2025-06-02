@@ -1,7 +1,7 @@
 import requests
 
 class APIHandler:
-    def __init__(self, default_city="London", units="metric", api_key=None):
+    def __init__(self, default_city="New York", units="metric", api_key=None):
         self.base_url = "https://api.weatherapi.com/v1/current.json"
         self.units = units
         self.api_key = api_key or '671e070c61b542ccac890712250106'
