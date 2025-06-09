@@ -1,11 +1,10 @@
 import requests
 
 class APIHandler:
-    def __init__(self, default_city="New York", units="metric", api_key=None):
+    def __init__(self, default_city="London", units="metric", api_key=None):
         self.base_url = "https://api.weatherapi.com/v1/current.json"
         self.units = units
-        # read keys from config
-        self.api_key = api_key
+        self.api_key = api_key or '671e070c61b542ccac890712250106'
         self.default_city = default_city
         self.aqi = "yes"
 
@@ -19,23 +18,61 @@ class APIHandler:
             'aqi': self.aqi
         }
         try:
-
             response = requests.get(self.base_url, params=params)
             response.raise_for_status()  # Raise an error for bad responses
             data = response.json()
             print(f"Current weather in {data['location']['name']}, {data['location']['country']}:")
-            if self.units == 'metric':
-                print(f"Temperature: {data['current']['temp_c']}°C")
-            else:
-                print(f"Temperature: {data['current']['temp_f']}°F")
+            print(f"Temperature: {data['current']['temp_c']}°C")
         except requests.exceptions.RequestException as e:
             print(f"Error fetching weather data: {e}")
             return None
     def fetch_forecast(self):
-        """
-        Fetch and display 5-day weather forecast from WeatherAPI.
+        url = "https://api.weatherapi.com/v1/forecast.json"
+        params = {
+            'key': self.api_key,
+            'q': self.default_city,
+            'days': 3,  # Fetch 3-day forecast
+            'aqi': self.aqi
+        }
+        emoji_map = {
+            "Sunny": "☀️",
+            "Partly cloudy": "🌤️",
+            "Cloudy": "☁️",
+            "Overcast": "🌥️",
+            "Mist": "🌫️",
+            "Patchy rain possible": "🌧️",
+            "Light rain": "🌦️",
+            "Heavy rain": "🌧️",
+            "Thunderstorm": "⛈️",
+            "Snow": "❄️"
+        }
+        try:
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+
+            print(f"\n📅 3-Day Forecast for {self.default_city}:\n")
+            for day in data['forecast']['forecastday']:
+                date = day['date']
+                avg_temp = day['day']['avgtemp_c'] if self.units == 'metric' else day['day']['avgtemp_f']
+                max_temp = day['day']['maxtemp_c'] if self.units == 'metric' else day['day']['maxtemp_f']
+                min_temp = day['day']['mintemp_c'] if self.units == 'metric' else day['day']['mintemp_f']
+                humidity = day['day']['avghumidity']
+                condition = day['day']['condition']['text']
+                icon = emoji_map.get(condition, "")
+
+                unit = "°C" if self.units == 'metric' else "°F"
+
+                print(f"{date} {icon}")
+                print(f"  🌡️ Avg: {avg_temp}{unit} | 🔺 Max: {max_temp}{unit} | 🔻 Min: {min_temp}{unit}")
+                print(f"  💧 Humidity: {humidity}%")
+                print(f"  🌤️ Condition: {condition}")
+                print("-" * 50)
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error fetching forecast: {e}")
     
-        """
+        
+        
         # Placeholder for forecast functionality
         print("🔔 Forecast feature not implemented yet.")
     def set_city(self, city):

@@ -18,7 +18,7 @@ def main():
     while True:
         print("\nWelcome to the Weather CLI!")
         print("1. Current Weather")
-        print("2. 5-Day Forecast")
+        print("2. 3-Day Forecast")
         print("3. Change City")
         print("4. Change Units (°C/°F)")
         print("5. Exit")
@@ -28,7 +28,7 @@ def main():
         if choice == '1':
             api.fetch_weather()
         elif choice == '2':
-            print("🔔 Forecast feature not implemented yet.")  # Placeholder
+            api.fetch_forecast()
         elif choice == '3':
             new_city = input("Enter new city: ").strip()
             api.set_city(new_city)
