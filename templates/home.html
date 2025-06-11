@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="POST" action="{{ url_for('search') }}" style="text-align:center; margin:1rem;">
+    <input name="city" placeholder="Enter city" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <section class="weather-main">
+    <h2>{{ weather.location }}</h2>
+    <p>{{ weather.date }}</p>
+    <h1>{{ weather.temperature }}° {{ weather.unit_icon }}</h1>
+    <p>Feels like {{ weather.feels_like }}° • {{ weather.description }}</p>
+    <p>H: {{ weather.high }}° / L: {{ weather.low }}°</p>
+  </section>
+
+  <section class="forecast">
+    {% for hour in weather.hourly %}
+      <div>
+        <p>{{ hour.time }}</p>
+        <p>{{ hour.icon }}</p>
+        <p>{{ hour.temp }}°</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section class="details">
+    <p>Humidity: {{ weather.humidity }}%</p>
+    <p>Wind: {{ weather.wind }}</p>
+    <p>Pressure: {{ weather.pressure }} hPa</p>
+    <p>UV Index: {{ weather.uv }}</p>
+    <p>Sunrise: {{ weather.sunrise }} • Sunset: {{ weather.sunset }}</p>
+  </section>
+{% endblock %}

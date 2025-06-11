@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Favorites</h1>
+  <ul>
+    {% for w in weather_list %}
+      <li>{{ w.location }}: {{ w.temperature }}° {{ w.unit_icon }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

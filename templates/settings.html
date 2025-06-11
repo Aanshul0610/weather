@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Settings</h1>
+  <form method="POST" style="padding:1rem;">
+    <label>
+      Default City:
+      <input name="default_city" value="{{ config.location }}">
+    </label><br><br>
+
+    <label>
+      Units:
+      <select name="units">
+        <option value="metric" {% if config.units=='metric' %}selected{% endif %}>Metric</option>
+        <option value="imperial" {% if config.units=='imperial' %}selected{% endif %}>Imperial</option>
+      </select>
+    </label><br><br>
+
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}
