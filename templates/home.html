@@ -1,33 +1,91 @@
-{% extends 'base.html' %}
-{% block content %}
-  <form method="POST" action="{{ url_for('search') }}" style="text-align:center; margin:1rem;">
-    <input name="city" placeholder="Enter city" required>
-    <button type="submit">Search</button>
-  </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container py-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-  <section class="weather-main">
-    <h2>{{ weather.location }}</h2>
-    <p>{{ weather.date }}</p>
-    <h1>{{ weather.temperature }}° {{ weather.unit_icon }}</h1>
-    <p>Feels like {{ weather.feels_like }}° • {{ weather.description }}</p>
-    <p>H: {{ weather.high }}° / L: {{ weather.low }}°</p>
-  </section>
+        <h1 class="mb-4">Weather App</h1>
+        
+        {% if weather %}
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2>{{ weather.city }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center">
+                                <div class="display-1 me-4">{{ weather.temp }}°</div>
+                                <div>
+                                    <h3>{{ weather.description|capitalize }}</h3>
+                                    <p class="mb-0">Feels like: {{ weather.feels_like }}°</p>
+                                    <p class="mb-0">Min: {{ weather.temp_min }}° | Max: {{ weather.temp_max }}°</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex flex-column">
+                                <p><i class="fas fa-wind me-2"></i> Wind: {{ weather.wind_speed }} m/s</p>
+                                <p><i class="fas fa-tint me-2"></i> Humidity: {{ weather.humidity }}%</p>
+                                <p><i class="fas fa-sun me-2"></i> Sunrise: {{ weather.sunrise }}</p>
+                                <p><i class="fas fa-moon me-2"></i> Sunset: {{ weather.sunset }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  <section class="forecast">
-    {% for hour in weather.hourly %}
-      <div>
-        <p>{{ hour.time }}</p>
-        <p>{{ hour.icon }}</p>
-        <p>{{ hour.temp }}°</p>
-      </div>
-    {% endfor %}
-  </section>
+            <form action="/add_favorite" method="post" class="mb-3">
+                <input type="hidden" name="city" value="{{ weather.city }}">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-star me-2"></i>Add to Favorites
+                </button>
+            </form>
+        {% endif %}
 
-  <section class="details">
-    <p>Humidity: {{ weather.humidity }}%</p>
-    <p>Wind: {{ weather.wind }}</p>
-    <p>Pressure: {{ weather.pressure }} hPa</p>
-    <p>UV Index: {{ weather.uv }}</p>
-    <p>Sunrise: {{ weather.sunrise }} • Sunset: {{ weather.sunset }}</p>
-  </section>
-{% endblock %}
+        <div class="card mb-4">
+            <div class="card-header">Search City</div>
+            <div class="card-body">
+                <form action="/search" method="post">
+                    <div class="input-group">
+                        <input type="text" name="city" class="form-control" placeholder="Enter city name" required>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="/favorites" class="btn btn-outline-primary me-md-2">
+                <i class="fas fa-heart me-2"></i>View Favorites
+            </a>
+            <a href="/forecast?city={% if weather %}{{ weather.city }}{% endif %}" class="btn btn-outline-info me-md-2">
+                <i class="fas fa-calendar-alt me-2"></i>3-Day Forecast
+            </a>
+            <a href="/settings" class="btn btn-outline-secondary">
+                <i class="fas fa-cog me-2"></i>Settings
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

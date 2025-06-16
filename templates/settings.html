@@ -1,20 +1,46 @@
-{% extends 'base.html' %}
-{% block content %}
-  <h1>Settings</h1>
-  <form method="POST" style="padding:1rem;">
-    <label>
-      Default City:
-      <input name="default_city" value="{{ config.location }}">
-    </label><br><br>
-
-    <label>
-      Units:
-      <select name="units">
-        <option value="metric" {% if config.units=='metric' %}selected{% endif %}>Metric</option>
-        <option value="imperial" {% if config.units=='imperial' %}selected{% endif %}>Imperial</option>
-      </select>
-    </label><br><br>
-
-    <button type="submit">Save</button>
-  </form>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container py-4">
+        <h1 class="mb-4">Application Settings</h1>
+        
+        <a href="/" class="btn btn-secondary mb-4">
+            <i class="fas fa-arrow-left me-2"></i>Back to Home
+        </a>
+        
+        <div class="card">
+            <div class="card-header">Weather Settings</div>
+            <div class="card-body">
+                <form action="/settings" method="post">
+                    <div class="mb-3">
+                        <label for="default_city" class="form-label">Default City</label>
+                        <input type="text" class="form-control" id="default_city" 
+                               name="default_city" value="{{ config.default_city }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="units" class="form-label">Temperature Units</label>
+                        <select class="form-select" id="units" name="units">
+                            <option value="metric" {% if config.units == 'metric' %}selected{% endif %}>
+                                Celsius (°C)
+                            </option>
+                            <option value="imperial" {% if config.units == 'imperial' %}selected{% endif %}>
+                                Fahrenheit (°F)
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Settings
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
